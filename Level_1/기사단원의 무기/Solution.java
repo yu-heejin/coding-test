@@ -3,35 +3,29 @@ import java.util.ArrayList;
 
 class Solution {
     private List<Integer> measureCounts;
+    private int measureCountIndex;
     private int totalKgSum;
     
     public int solution(int number, int limit, int power) {
         measureCounts = new ArrayList<>();
+        measureCountIndex = 0;
         totalKgSum = 0;
         
         int personNumber = 1;
         int numberForDevide = 1;
         int count = 0;
-        int measureCountIndex = 0;
         
         while (personNumber <= number) {
-            if (personNumber % numberForDevide == 0) {
-                count++;
-                
-                if (personNumber / numberForDevide != numberForDevide) {
-                    count++;
-                }
-            }
-            
+            count = calculateCount(count, personNumber, numberForDevide);
             numberForDevide++;
             
             if (numberForDevide > Math.sqrt(personNumber)) {
-                measureCounts.add(count);
+                addMeasureCounts(count);
                 numberForDevide = 1;
                 personNumber++;
                 count = 0;
                 
-                totalKgSum += getKgSum(limit, power, measureCountIndex);
+                addTotalKgSum(limit, power);
                 measureCountIndex++;
             }
         }
@@ -39,11 +33,31 @@ class Solution {
         return totalKgSum;
     }
     
-    private int getKgSum(int limit, int power, int index) {
-        if (measureCounts.get(index) > limit) {
+    private int calculateCount(int count, int personNumber, int numberForDevide) {
+        if (personNumber % numberForDevide == 0) {
+            count++;
+            
+            if (personNumber / numberForDevide != numberForDevide) {
+                count++;
+            }
+        }
+        
+        return count;
+    }
+    
+    private void addMeasureCounts(int count) {
+        measureCounts.add(count);
+    }
+    
+    private void addTotalKgSum(int limit, int power) {
+        totalKgSum += getKgSum(limit, power);
+    }
+    
+    private int getKgSum(int limit, int power) {
+        if (measureCounts.get(measureCountIndex) > limit) {
             return power;
         }
         
-        return measureCounts.get(index);
+        return measureCounts.get(measureCountIndex);
     }
 }
