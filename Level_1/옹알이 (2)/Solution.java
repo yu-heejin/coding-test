@@ -19,7 +19,7 @@ class Solution {
     }
     
     private boolean isContinuous(String babbling) {
-        if (babbling.contains("11") ||babbling.contains("22") || babbling.contains("33") || babbling.contains("44")) {
+        if (babbling.contains("11") || babbling.contains("22") || babbling.contains("33") || babbling.contains("44")) {
             return true;
         }
         
