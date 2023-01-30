@@ -96,3 +96,51 @@ class Solution {
 ```
 
 - 조금 오래걸리는 느낌..?
+- 생각해보니까 애초에 뒤집을 이유가 없을 것 같아서 다시 풀어보기로 했다.
+
+## 최종 코드
+
+```java
+class Solution {
+    private final int BASE_NUMBER = 3;
+    
+    public int solution(int n) {
+        String reverseNumber = getReverseNumber(n, "");
+        return getAnswer(n, reverseNumber);
+    }
+    
+    private String getReverseNumber(int n, String reverseNumber) {
+        while (n > 0) {
+            reverseNumber += n % BASE_NUMBER;
+            n /= BASE_NUMBER;
+        }
+        
+        return reverseNumber;
+    }
+    
+    private int getAnswer(int n, String reverseNumber) {
+        int answer = 0;
+        int numberForMultiple = 1;
+        
+        for (int i = reverseNumber.length() - 1; i >= 0; i--) {
+            answer += (int)(reverseNumber.charAt(i) - '0') * numberForMultiple;
+            numberForMultiple *= BASE_NUMBER;
+        }
+        
+        return answer;
+    }
+}
+
+테스트 1 〉	통과 (11.78ms, 78.9MB)
+테스트 2 〉	통과 (12.96ms, 80MB)
+테스트 3 〉	통과 (10.58ms, 79.6MB)
+테스트 4 〉	통과 (10.16ms, 81.7MB)
+테스트 5 〉	통과 (12.02ms, 83MB)
+테스트 6 〉	통과 (8.68ms, 78.5MB)
+테스트 7 〉	통과 (9.62ms, 79.7MB)
+테스트 8 〉	통과 (11.70ms, 75MB)
+테스트 9 〉	통과 (13.29ms, 85.9MB)
+테스트 10 〉	통과 (8.60ms, 78MB)
+```
+
+- 훨씬 더 빠르다!
