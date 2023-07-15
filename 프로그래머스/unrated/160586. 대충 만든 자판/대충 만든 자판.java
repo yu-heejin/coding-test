@@ -30,6 +30,8 @@ class Solution {
                 if (keyCount.containsKey(key)) {
                     result[i] += keyCount.get(key);
                 } else {
+                    // 단, 목표 문자열을 작성할 수 없을 때는 -1을 저장한다.
+                    // 즉, 하나라도 없는 문자가 나오는 경우 작성할 수 없다고 판단하여 중단
                     result[i] = -1;
                     break;
                 }
