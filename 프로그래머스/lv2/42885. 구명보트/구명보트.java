@@ -1,6 +1,8 @@
 import java.util.*;
 
 class Solution {
+    // Greedy: 가장 큰 무게를 가진 사람부터 태운다.
+    
     public int solution(int[] people, int limit) {
         Arrays.sort(people);
         
