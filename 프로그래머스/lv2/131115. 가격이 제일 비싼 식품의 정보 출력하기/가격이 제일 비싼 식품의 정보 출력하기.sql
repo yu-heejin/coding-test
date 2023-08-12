@@ -1,4 +1,11 @@
-SELECT *
-FROM food_product
-ORDER BY price DESC
-LIMIT 1;
+SELECT
+	*
+FROM
+	food_product
+WHERE price = (
+	SELECT
+		MAX(price)
+	FROM
+		food_product
+)
+;
