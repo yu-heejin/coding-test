@@ -23,7 +23,7 @@ class Main {
 			@Override
 			public int compare(Long o1, Long o2) {
 				long oneCount1 = Long.bitCount(o1);
-        long oneCount2 = Long.bitCount(o2);
+        			long oneCount2 = Long.bitCount(o2);
 				
 				if (oneCount1 > oneCount2) {
 					// 10진수 정수를 2진수로 나타냈을 때 2진수에 포함된 1의 개수를 기준으로 내림차순 정렬한다.
