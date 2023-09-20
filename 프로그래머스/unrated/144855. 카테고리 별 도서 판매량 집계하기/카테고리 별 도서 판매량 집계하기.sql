@@ -1,13 +1,13 @@
 SELECT
-    BOOK.category
-    , SUM(SALES.sales) AS total_sales
+    B.category
+    , SUM(BS.sales) AS total_sales
 FROM
-    book_sales SALES
-    JOIN book BOOK ON SALES.book_id = BOOK.book_id
+    book_sales BS
+    JOIN book B ON BS.book_id = B.book_id
 WHERE
-    SALES.sales_date LIKE '2022-01%'
+    BS.sales_date LIKE '2022-01%'
 GROUP BY
-    BOOK.category
+    B.category
 ORDER BY
-    BOOK.category
+    B.category
 ;
