@@ -76,20 +76,20 @@ public class Main {
                 }
             }
             
-            if (q.peek() != null) {
+            if (q.peek() != null) {  // 가장 가까운 거리가 있는 경우
                 Position peek = q.peek();
                 
-                if (board[peek.x][peek.y] < mySize && board[peek.x][peek.y] > 0) {
-                    getFishCount++;
-                    if (getFishCount == mySize) {
+                if (board[peek.x][peek.y] < mySize && board[peek.x][peek.y] > 0) {  // 그 거리에 있는 물고기가 나보다 작고 0이 아닌 경우
+                    getFishCount++;  // 물고기를 먹음
+                    if (getFishCount == mySize) {   // 먹은 물고기 크기가 나랑 같은 경우 크기 증가
                         mySize++;
                         getFishCount = 0;
                     }
-                    board[peek.x][peek.y] = 0;
+                    board[peek.x][peek.y] = 0;    // 이미 먹어버렸으므로 0
                     
-                    q.clear();
-                    q.add(new Position(peek.x, peek.y, 0));
-                    answer += peek.dist;
+                    q.clear();   // 새 위치에서 시작
+                    q.add(new Position(peek.x, peek.y, 0));   // 현재 위치를 넣어준다. (시작 위치) -> 시작 위치에서 새로 시작하기 때문
+                    answer += peek.dist;   // 시작 위치에서 새로 방문한 위치이므로 +
                     visited = new boolean[n][n];
                     visited[peek.x][peek.y] = true;
                 }
