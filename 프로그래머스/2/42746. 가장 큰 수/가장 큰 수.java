@@ -27,7 +27,8 @@ class Solution {
         }
         
         if (sb.toString().charAt(0) == '0') return "0";
-        
+
+        // return String.valueOf(Long.parseLong(sb.toString()));    // 해당 부분은 숫자가 Long 범위를 넘어가는 경우 에러가 발생할 수 있음
         return sb.toString();
     }
 }
