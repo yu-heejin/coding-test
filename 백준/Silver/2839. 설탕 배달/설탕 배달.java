@@ -1,35 +1,38 @@
+import java.util.*;
 import java.io.*;
 
 public class Main {
-    public static void main(String args[]) throws Exception {
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        
-        int n = Integer.parseInt(br.readLine());
+  public static void main(String args[]) throws Exception {
+    BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+    
+    int N = Integer.parseInt(br.readLine());
+    
+    if (N % 5 == 0) {
+        // 설탕의 무게가 5의 배수라면 5kg 봉지를 최대한 가져가는 것이 좋음
+        System.out.println(N / 5);
+    } else {
+        // 5로 나누어 떨어지지 않는 경우 - 최대한의 5와 최소한의 3을 사용
         
         int answer = 0;
-        
-        if (n % 5 == 0) {
-            // n이 5로 나누어 떨어진다면 최대한 5로 나누는 것이 좋다.
-            System.out.println(n / 5);
-        } else {
-            // n이 5와 3의 조합으로 나누어 떨어지는 경우
-            // n이 3으로 나누어 떨어지는 경우
-            // 5와 3으로 나누어지지 않는 경우
+        while (N > 0) {
+            // 미리 3을 빼는 이유는, 5의 배수로 만들기 위함
+            N -= 3;
+            answer++;
             
-            // 5로 나누어 떨어지지 않는 경우 3키로 설탕 봉지를 사용한다.
-            
-            while (n >= 0) {
-                n -= 3;
-                answer++;
-                
-                if (n % 5 == 0) {
-                    answer += (n / 5);
-                    System.out.println(answer);
-                    return;
-                }
+            // 5의 배수가 되는 경우, 최대한의 5키로 봉지를 사용
+            if (N % 5 == 0) {
+                answer += N / 5;
+                break;
             }
             
-            System.out.println(n != 0 ? -1 : answer);
+            // 만약 정확하게 만들 수 없는 경우 -1
+            if (N < 3) {
+                answer = -1;
+                break;
+            }
         }
+        
+        System.out.println(answer);
     }
+  }
 }
