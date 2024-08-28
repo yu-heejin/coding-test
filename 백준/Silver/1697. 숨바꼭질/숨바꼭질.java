@@ -3,52 +3,59 @@ import java.util.*;
 
 public class Main {
     
-    static int[] board = new int[100001];
+    static boolean[] visited = new boolean[100003];
     
-    public static void main(String args[]) throws Exception {
+    public static void main(String[] args) throws Exception {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         
         String[] input = br.readLine().split(" ");
-        int n = Integer.parseInt(input[0]);
-        int k = Integer.parseInt(input[1]);
         
-        Arrays.fill(board, -1);
+        int N = Integer.parseInt(input[0]);
+        int K = Integer.parseInt(input[1]);
         
-        bfs(n, k);
+        System.out.println(bfs(N, K));
     }
     
-    private static void bfs(int n, int k) {
-        Queue<Integer> q = new LinkedList<>();
+    public static int bfs(int N, int K) {
+        Queue<int[]> q = new LinkedList<>();
+        visited[N] = true;
         
-        q.add(n);     // 현재 위치
-        board[n] = 0;   // 그 때의 시간
+        q.add(new int[] {N, 0});
+        int min = Integer.MAX_VALUE;
         
         while (!q.isEmpty()) {
-            int curr = q.poll();
+            int[] curr = q.poll();
             
-            // 도착한 경우
-            if (curr == k) {
-                System.out.println(board[curr]);
-                return;
+            //System.out.println(Arrays.toString(curr));
+            
+            // 현재 위치가 K와 같으면 최소값 갱신
+            if (curr[0] == K) {
+                min = Math.min(min, curr[1]);
+                break;
             }
             
-            // 범위를 벗어나지 않았고 방문하지 않은 경우
-            if (curr - 1 >= 0 && board[curr - 1] == -1) {
-                q.add(curr - 1);
-                board[curr - 1] = board[curr] + 1;
+            // 걷는 경우
+            int nextWork1 = curr[0] - 1;
+            int nextWork2 = curr[0] + 1;
+            // 순간 이동하는 경우
+            int move = curr[0] * 2;
+            
+            if (nextWork1 <= 100000 && nextWork1 >= 0 && !visited[nextWork1]) {
+                q.add(new int[] {nextWork1, curr[1] + 1});
+                visited[nextWork1] = true;
             }
             
-            // 범위를 벗어나지 않았고 방문하지 않은 경우
-            if (curr + 1 <= 100000 && board[curr + 1] == -1) {
-                q.add(curr + 1);
-                board[curr + 1] = board[curr] + 1;
+            if (nextWork2 <= 100000 && nextWork2 >= 0 && !visited[nextWork2]) {
+                q.add(new int[] {nextWork2, curr[1] + 1});
+                visited[nextWork2] = true;
             }
             
-            // 범위를 벗어나지 않았고 방문하지 않은 경우
-            if (curr * 2 <= 100000 && board[curr * 2] == -1) {
-                q.add(curr * 2);
-                board[curr * 2] = board[curr] + 1;
+            if (move <= 100000 && move >= 0 && !visited[move]) {
+                q.add(new int[] {move, curr[1] + 1});
+                visited[move] = true;
             }
         }
+        
+        return min;
     }
 }
