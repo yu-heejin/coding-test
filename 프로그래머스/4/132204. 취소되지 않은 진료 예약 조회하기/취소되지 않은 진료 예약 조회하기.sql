@@ -5,10 +5,9 @@ SELECT A.apnt_no
     , D.dr_name
     , A.apnt_ymd
 FROM appointment A
-    JOIN patient P ON P.pt_no = A.pt_no
-    JOIN doctor D ON D.dr_id = A.mddr_id
-WHERE A.mcdp_cd = 'CS'
+    JOIN patient P ON A.pt_no = P.pt_no
+    JOIN doctor D ON A.mddr_id = D.dr_id
+WHERE A.apnt_ymd LIKE '2022-04-13%'
     AND A.apnt_cncl_yn = 'N'
-    AND DATE_FORMAT( A.apnt_ymd, '%Y-%m-%d') = '2022-04-13'
 ORDER BY A.apnt_ymd
 ;
