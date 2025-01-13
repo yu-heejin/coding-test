@@ -2,39 +2,47 @@ import java.util.*;
 
 class Solution {
     public int[] solution(String[] operations) {
-        List<Integer> numbers = new ArrayList<>();
+        // 트리 구조, 기본 key 오름차순 정렬
+        TreeMap<Integer, Integer> pq = new TreeMap<>();
         
         for (String operation : operations) {
             String[] command = operation.split(" ");
+            int number = Integer.parseInt(command[1]);
             
             switch (command[0]) {
                 case "I":
-                    numbers.add(Integer.parseInt(command[1]));
-                    Collections.sort(numbers);
+                    // 숫자, 들어간 횟수
+                    pq.put(number, pq.getOrDefault(number, 0) + 1);
                     break;
-                case "D":
-                    if (numbers.size() == 0) continue;
                     
-                    if (command[1].equals("1")) {
-                        int maxIndex = numbers.size() - 1;
-                        numbers.remove(maxIndex);
+                case "D":
+                    if (pq.size() == 0) continue;
+                    
+                    if (number == 1) {
+                        if (pq.get(pq.lastKey()) == 1) {
+                            pq.remove(pq.lastKey());
+                        } else {
+                            pq.put(pq.lastKey(), pq.get(pq.lastKey()) - 1);
+                        }
                     } else {
-                        numbers.remove(0);
+                        if (pq.get(pq.firstKey()) == 1) {
+                            pq.remove(pq.firstKey());
+                        } else {
+                            pq.put(pq.firstKey(), pq.get(pq.firstKey()) - 1);
+                        }
                     }
+                    
                     break;
             }
         }
         
-        int[] answer = new int[2];
-        
-        if (numbers.size() == 1) {
-            answer[0] = numbers.get(0);
-            answer[1] = answer[0];
-        } else if (numbers.size() >= 2) {
-            answer[0] = numbers.get(numbers.size() - 1);
-            answer[1] = numbers.get(0);
+        int[] answers = new int[2];
+            
+        if (pq.size() > 0) {
+            answers[0] = pq.lastKey();
+            answers[1] = pq.firstKey();
         }
-        
-        return answer;
+
+        return answers;
     }
 }
