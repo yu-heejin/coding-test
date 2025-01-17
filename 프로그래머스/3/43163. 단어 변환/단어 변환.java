@@ -1,52 +1,40 @@
 import java.util.*;
 
 class Solution {
-    private boolean[] visited;
-    private int min = 52;
+    private int minCount = Integer.MAX_VALUE;
     
-    public int solution(String begin, String target, String[] words) {        
-        // 탐색을 시작할 위치를 선택한다.
-        for (int i = 0; i < words.length; i++) {
-            if (canChange(begin, words[i])) {
-                visited = new boolean[words.length];
-                checkCount(words[i], target, words, 1);
-            }
-        }
+    public int solution(String begin, String target, String[] words) {
+        if (!Arrays.asList(words).contains(target)) return 0;
         
-        return min == 52 ? 0 : min;
+        dfs(begin, target, new boolean[words.length], words, 0);
+        
+        return minCount;
     }
     
-    private void checkCount(String begin, String target, String[] words, int depth) {
-        if (begin.equals(target)) {
-            if (min > depth) {
-                min = depth;
-            }
-            
+    private void dfs(String current, String target, boolean[] visited, String[] words, int count) {
+        if (current.equals(target)) {
+            minCount = Math.min(minCount, count);
             return;
         }
         
         for (int i = 0; i < words.length; i++) {
-            if (!visited[i] && canChange(begin, words[i])) {
-                visited[i] = true;
-                checkCount(words[i], target, words, depth + 1);
-                visited[i] = false;
+            if (visited[i]) continue;
+            
+            int diffCount = 0;
+            for (int j = 0; j < current.length(); j++) {
+                if (words[i].charAt(j) != current.charAt(j)) diffCount++;
+            }
+            
+            if (diffCount == 1) {
+                if (target.equals(words[i])) {
+                    minCount = Math.min(minCount, count + 1);
+                    break;
+                } else {
+                    visited[i] = true;
+                    dfs(words[i], target, visited, words, count + 1);
+                    visited[i] = false;
+                }
             }
         }
-    }
-    
-    private boolean canChange(String begin, String word) {
-        int count = 0;
-        
-        for (int i = 0; i < begin.length(); i++) {
-            if (begin.charAt(i) == word.charAt(i)) {
-                count++;
-            }
-        }
-        
-        if (count == begin.length() - 1) {
-            return true;
-        }
-        
-        return false;
     }
 }
