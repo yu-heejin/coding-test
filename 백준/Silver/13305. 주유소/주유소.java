@@ -6,28 +6,27 @@ class Main {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
         int n = Integer.parseInt(br.readLine());
-        int[] distances = new int[n - 1];
-        int[] costs = new int[n];
+        long[] distances = new long[n - 1];
+        long[] costs = new long[n];
 
         String[] input = br.readLine().split(" ");
 
         for (int i = 0; i < n - 1; i++) {
-            distances[i] = Integer.parseInt(input[i]);
+            distances[i] = Long.parseLong(input[i]);
         }
 
         input = br.readLine().split(" ");
 
         for (int i = 0; i < n; i++) {
-            costs[i] = Integer.parseInt(input[i]);
+            costs[i] = Long.parseLong(input[i]);
         }
 
         int position = 0;
-        int oil = 0;
-        int totalCost = 0;
+        long oil = 0;
+        long totalCost = 0;
 
         while (position < n - 1) {
-            int cost = costs[position];
-
+            long cost = costs[position];
             // 현재 위치보다 비싼 도시가 안나올 때까지 기름을 채운다.
             // 비싼 도시가 나오면 여기서 계속 채우는게 맞다
             // 마지막(n-1) 인덱스까지 가면 그냥 끝까지 넣는다.
