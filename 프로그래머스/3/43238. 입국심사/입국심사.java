@@ -2,33 +2,33 @@ import java.util.*;
 
 class Solution {
     public long solution(int n, int[] times) {
+        // 오름차순 정렬
         Arrays.sort(times);
+        long result = 0;
         
+        // 최소 시간 및 최대 시간 범위 지정
         long left = 0;
-        // 가장 긴 시간은 모든 사람들이 오래 걸리는 심사대에서 심사하는 경우
-        long right = (long) times[times.length - 1] * n;
-        long answer = 0L;
+        long right = (long)times[times.length - 1] * n;  // 최악의 경우, 오래걸리는 곳에만 입국심사 하는 경우
         
         while (left <= right) {
             long mid = (left + right) / 2;
             
-            // mid 시간 동안 몇 명을 처리할 수 있는지?
+            // mid 시간 동안 각 심사국에서 몇명을 처리하는지 보려면 나누기 필요
             long total = 0;
-            
             for (int i = 0; i < times.length; i++) {
                 total += (mid / times[i]);
             }
             
-            // 해당 시간 동안 모든 사람을 처리할 수 없는 경우 left 증가
             if (total < n) {
+                // 실제 인원보다 처리를 못하는 경우 - left를 늘린다
                 left = mid + 1;
             } else {
-                // 해당 시간 동안 처리할 수 있는 최소 경우의 수를 구함
+                // 모든 사람이 검사 받았으나 더 작은 최솟값이 있을 수도 있음
                 right = mid - 1;
-                answer = mid;
+                result = mid;
             }
         }
         
-        return answer;
+        return result;
     }
 }
