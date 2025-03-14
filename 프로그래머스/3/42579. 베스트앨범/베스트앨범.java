@@ -1,69 +1,67 @@
 import java.util.*;
 
-class Music {
-    int id;
-    int playCount;
-    String genre;
-    int genreCount;
-    
-    public Music(int id, int playCount, String genre, int genreCount) {
-        this.id = id;
-        this.playCount = playCount;
-        this.genre = genre;
-        this.genreCount = genreCount;
-    }
-}
-
 class Solution {
     public int[] solution(String[] genres, int[] plays) {
-        // 속한 노래가 많이 재생된 장르순 정렬
-        Map<String, Integer> genresCount = new TreeMap<>();
-        Map<String, Integer> musicCount = new HashMap<>();
-        
+        // 가장 많이 재생된 장르
+        HashMap<String, Integer> genreCount = new HashMap<>();
         for (int i = 0; i < genres.length; i++) {
-            genresCount.put(
+            genreCount.put(
                 genres[i], 
-                genresCount.getOrDefault(genres[i], 0) + plays[i]
+                genreCount.getOrDefault(genres[i], 0) + plays[i]
             );
-            
-            musicCount.put(genres[i], 2);
         }
-        
-        // 객체별 정렬
-        List<Music> music = new ArrayList<>();
-        
-        for (int i = 0; i < genres.length; i++) {
-            music.add(new Music(i, plays[i], genres[i], genresCount.get(genres[i])));
-        }
-        
-        // 장르 재생 > 장르 내 재생 > 고유번호 낮은 순 정렬
-        Collections.sort(music, (o1, o2) -> {
-            if (o1.genreCount == o2.genreCount) {
-                if (o1.playCount == o2.playCount) {
-                    return o1.id - o2.id;
-                }
-                
-                return o2.playCount - o1.playCount;
-            }
-            
-            return o2.genreCount - o1.genreCount;
+        // 장르 정렬
+        List<Map.Entry<String, Integer>> entries = new LinkedList<>(genreCount.entrySet());
+        List<String> genresSort = new ArrayList<>();
+        entries.sort((o1, o2) -> {
+            return genreCount.get(o2.getKey()) - genreCount.get(o1.getKey());
         });
         
-        List<Integer> answer = new ArrayList<>();
+        // 정렬된 장르순으로 삽입
+        for (Map.Entry<String, Integer> entry : entries) {
+            genresSort.add(entry.getKey());
+        }
         
-        for (Music m : music) {
-            if (musicCount.get(m.genre) > 0) {
-                answer.add(m.id);
-                musicCount.put(m.genre, musicCount.get(m.genre) - 1);
+        // 장르별 가장 많이 재생된 노래
+        List<Integer> pq = new ArrayList<>();
+        
+        for (int i = 0; i < genres.length; i++) {
+            pq.add(i);
+        }
+        
+        Collections.sort(pq, (o1, o2) -> {
+            // 횟수가 같으면 고유번호가 가장 낮은 순서대로
+            if (plays[o2] == plays[o1]) {
+                return o1 - o2;
+            }
+            
+            // 횟수가 큰 순서로 정렬
+            return plays[o2] - plays[o1];
+        });
+        
+        // 장르별 가장 많이 재생된 노래 2개씩 선곡
+        List<Integer> result = new ArrayList<>();
+        boolean[] visited = new boolean[pq.size()];
+        for (String genre : genresSort) {
+            int count = 0;
+            for (Integer i : pq) {
+                if (!visited[i] && genres[i].equals(genre)) {
+                    visited[i] = true;
+                    result.add(i);
+                    count++;
+                }
+                
+                if (count >= 2) {
+                    break;
+                }
             }
         }
         
-        int[] result = new int[answer.size()];
-        
-        for (int i = 0; i < answer.size(); i++) {
-            result[i] = answer.get(i);
+        int[] answer = new int[result.size()];
+        for (int i = 0; i < result.size(); i++) {
+            answer[i] = result.get(i);
         }
         
-        return result;
+        return answer;
     }
 }
