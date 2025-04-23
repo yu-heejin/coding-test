@@ -8,21 +8,13 @@ class Solution {
         int currentWeight = 0;
         
         while (i < truck_weights.length) {
-            // 1. 다리에 아무것도 없는 경우
-            if (q.isEmpty()) {
-                q.add(truck_weights[i]);
-                currentWeight += truck_weights[i];
-                i++;
-                time++;
-                continue;
-            }
-            
+            // 1. 내릴 트럭 먼저 내리기
             if (q.size() == bridge_length) {
                 int truckWeight = q.poll();
                 currentWeight -= truckWeight;
             }
             
-            // 2. 자리가 남은 경우 (꽉 차지 않은 경우)
+            // 2. 다음 트럭 타기
             if (q.size() < bridge_length) {
                 if (currentWeight + truck_weights[i] <= weight) {
                     q.add(truck_weights[i]);
