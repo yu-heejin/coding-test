@@ -1,48 +1,40 @@
 import java.util.*;
 
 class Solution {
-    
-    PriorityQueue<Integer> q = new PriorityQueue<>();
-    
-    // 런타임 에러: 스코빌 지수가 하나 남은 경우
     public int solution(int[] scoville, int K) {
-        int answer = 0;
+        PriorityQueue<Integer> pq = new PriorityQueue<>();
         
-        initQueue(scoville, K);
-        
-        if (q.peek() > K) {
-            return answer;
+        for (int i = 0; i < scoville.length; i++) {
+            pq.add(scoville[i]);
         }
         
-        while (!q.isEmpty()) {
-            int min1 = q.poll();
+        int result = 0;
+        
+        while (!pq.isEmpty()) {
+            if (pq.peek() >= K) {
+                // 모든 음식이 K 이상의 스코빌을 가진다.
+                break;
+            }
             
-            if (q.isEmpty()) {
-                if (min1 >= K) {
-                    return answer;
-                }
-                
+            if (pq.size() < 2) {
+                // 더 이상 섞을 수 없다.
+                break;
+            }
+            
+            int first = pq.poll();    // 가장 맵지 않은 음식
+            int second = pq.poll();   // 두번째로 맵지 않은 음식
+            int sum = first + (second * 2);
+
+            pq.add(sum);
+            result++;    // 섞어야하는 최소 횟수
+        }
+        
+        while (!pq.isEmpty()) {
+            if (pq.poll() < K) {
                 return -1;
             }
-            
-            if (min1 >= K) {
-                return answer;
-            }
-            
-            int min2 = q.poll();
-            int mix = min1 + (min2 * 2);
-            
-            q.add(mix);
-            
-            answer++;
         }
         
-        return answer;
-    }
-    
-    private void initQueue(int[] scoville, int K) {
-        for (int s : scoville) {
-            q.add(s);
-        }
+        return result;
     }
 }
