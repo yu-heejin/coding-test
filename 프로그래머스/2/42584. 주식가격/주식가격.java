@@ -2,25 +2,27 @@ import java.util.*;
 
 class Solution {
     public int[] solution(int[] prices) {
-        int[] result = new int[prices.length];
-        Stack<Integer> times = new Stack<>();
+        int[] answer = new int[prices.length];
+        Stack<Integer> time = new Stack<>();
         
         for (int i = 0; i < prices.length; i++) {
-            while (!times.isEmpty() && prices[times.peek()] > prices[i]) {
-                // 현재 가격이 더 작은 경우, 현재 가격보다 더 작은 가격의 시간(인덱스)을 계산
-                int index = times.pop();
-                result[index] = i - index;
+            // 주식 가격이 떨어진 경우, 주식이 처음 들어간 시점과 현재 시점 사이의 초를 구한다.
+            // 기존에 스택에 쌓인 모든 값들을 비교
+            // 1초간 머무른 것도 1초, 1초간 유지한 것도 1초
+            while (!time.isEmpty() && prices[time.peek()] > prices[i]) {
+                int index = time.pop();
+                answer[index] = i - index;
             }
             
-            times.push(i);
+            time.push(i);
         }
         
-        // 가격이 떨어지지 않은 시간을 계산하기 때문에, 마지막 시간은 비교할 미래 시간이 없어서 0초
-        while (!times.isEmpty()) {
-            int index = times.pop();
-            result[index] = prices.length - 1 - index;
+        // 끝까지 살아남은 주식들
+        while (!time.isEmpty()) {
+            int index = time.pop();
+            answer[index] = prices.length - 1 - index;
         }
         
-        return result;
+        return answer;
     }
 }
