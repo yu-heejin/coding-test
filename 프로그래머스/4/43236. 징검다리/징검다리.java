@@ -1,49 +1,59 @@
 import java.util.*;
 
-// https://born2bedeveloper.tistory.com/41
 class Solution {
     public int solution(int distance, int[] rocks, int n) {
-        int start = 1;
-        int end = distance;
-        
-        Arrays.sort(rocks);
+        int left = 0;
+        int right = distance;    // 거리의 최대값
         int answer = 0;
         
-        /**
-            mid는 바위 간의 최소 거리 후보값이다.
-            따라서 mid보다 작은 거리를 가진 바위는 제거해야 최소 거리를 유지할 수 있다.
-            즉, 바위를 몇개 제거해야 이 거리보다 짧은 거리가 없어질지 고민해봐야한다.
-        **/
-        while (start <= end) {
-            int mid = (start + end) / 2;   // 거리 최소값의 후보
-            int removeRocks = 0;   // 제거한 바위 수
-            int rock = 0;   // 기준 점 (이전 바위 위치) - 거리는 왼쪽에서 오른쪽으로 거리를 재기 때문에 prev 돌이 필요하다.
+        // 이분탐색 - 정렬
+        Arrays.sort(rocks);
+        
+        while (left <= right) {
+            int mid = (left + right) / 2;     // 내가 지정한 최소 거리
+            int count = 0;    // 돌이 얼마나 지워지는지
+            int prev = 0;
             
             for (int i = 0; i < rocks.length; i++) {
-                // mid 거리를 만족시키지 못하는 돌은 제거한다.
-                if (rocks[i] - rock < mid) {
-                    // 돌과 돌 사이의 거리가 mid보다 작으면 제거해 그 이상의 거리를 유지한다. (mid가 최소가 되어야 한다.)
-                    removeRocks++;
+                // 가장 마지막에 남겨둔 돌을 기준으로 계산해야한다.
+                int dist = rocks[i] - prev;
+                
+                if (dist < mid) {
+                    count++;
                 } else {
-                    rock = rocks[i];      // 기준점이 되는 돌, 제거되지 않은 돌은 기준점이 된다.
+                    prev = rocks[i];
                 }
             }
             
-            // 마지막 바위의 거리 계산
-            if (distance - rock < mid) {
-                removeRocks++;
+            if (distance - prev < mid) {
+                count++;
             }
             
-            if (removeRocks <= n) {
-                // 조건을 만족하는 경우, 더 큰 최소값이 나올 수 있으므로 mid를 증가
+            if (count > n) {
+                // 지워야 할 돌보다 지운 돌이 더 많으면 mid(최소거리)를 줄여 지워지는 돌의 개수를 줄여야 한다.
+                right = mid - 1;
+            } else if (count <= n) {
+                // 지워야 할 돌보다 지운 돌이 적으면 mid를 늘여 지워지는 돌의 개수를 늘려야한다.
                 answer = mid;
-                start = mid + 1;
-            } else if (removeRocks > n) {
-                // 너무 많이 제거했다는 의미는 길이를 너무 넓게 잡았다는 의미로 mid를 감소
-                end = mid - 1;
+                left = mid + 1;
             }
         }
         
         return answer;
+    }
+    
+    private int getDistance(int distance, int[] rocks, int index) {
+        int before = 0;
+        int after = distance;
+        
+        if (index > 0) {
+            before = rocks[index - 1];
+        }
+        
+        if (index < rocks.length - 1) {
+            after = rocks[index + 1];
+        }
+        
+        return Math.abs(after - before);
     }
 }
