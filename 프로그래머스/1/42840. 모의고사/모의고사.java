@@ -1,51 +1,52 @@
 import java.util.*;
 
 class Solution {
+    private final int[] first = {1, 2, 3, 4, 5};
+    private final int[] second = {2, 1, 2, 3, 2, 4, 2, 5};
+    private final int[] third = {3, 3, 1, 1, 2, 2, 4, 4, 5, 5};
+    
     public int[] solution(int[] answers) {
-        int[] firstAnswers = {1, 2, 3, 4, 5};
-        int[] secondAnswers = {2, 1, 2, 3, 2, 4, 2, 5};
-        int[] thirdAnswers = {3, 3, 1, 1, 2, 2, 4, 4, 5, 5};
-        int[] scores = {0, 0, 0};
         int firstIndex = 0;
         int secondIndex = 0;
         int thirdIndex = 0;
+        int firstCount = 0;
+        int secondCount = 0;
+        int thirdCount = 0;
         
-        for (int answer : answers) {
-            if (firstAnswers[firstIndex] == answer) {
-                scores[0]++;
+        for (int i = 0; i < answers.length; i++) {
+            if (first[firstIndex] == answers[i]) {
+                firstCount++;
             }
             
-            if (secondAnswers[secondIndex] == answer) {
-                scores[1]++;
+            if (second[secondIndex] == answers[i]) {
+                secondCount++;
             }
             
-            if (thirdAnswers[thirdIndex] == answer) {
-                scores[2]++;
+            if (third[thirdIndex] == answers[i]) {
+                thirdCount++;
             }
             
-            firstIndex = (firstIndex + 1) % 5;
-            secondIndex = (secondIndex + 1) % 8;
-            thirdIndex = (thirdIndex + 1) % 10;
+            firstIndex = (firstIndex + 1) % first.length;
+            secondIndex = (secondIndex + 1) % second.length;
+            thirdIndex = (thirdIndex + 1) % third.length;
         }
         
-        List<Integer> results = new ArrayList<>();
-        // 최대 값을 찾기 위해 먼저 비교한다.
-        int max = Math.max(scores[0], Math.max(scores[1], scores[2]));
-        for (int i = 0; i < 3; i++) {
-            // 최대 점수랑 같으면 결과에 포함한다.
-            if (scores[i] == max) {
-                results.add(i + 1);
-            }
+        List<Integer> answer = new ArrayList<>();
+        int max = Math.max(firstCount, Math.max(secondCount, thirdCount));
+        
+        if (max == firstCount) {
+            answer.add(1);
         }
         
-        Collections.sort(results);
-        
-        int[] resultForReturn = new int[results.size()];
-        
-        for (int i = 0; i < results.size(); i++) {
-            resultForReturn[i] = results.get(i);
+        if (max == secondCount) {
+            answer.add(2);
         }
         
-        return resultForReturn;
+        if (max == thirdCount) {
+            answer.add(3);
+        }
+        
+        // List to int[]
+        return answer.stream().mapToInt(Integer::intValue).toArray();
     }
 }
