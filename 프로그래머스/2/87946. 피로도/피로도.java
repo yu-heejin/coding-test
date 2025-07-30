@@ -1,25 +1,24 @@
-/* DFS + 백트래킹 (완전탐색) */
 class Solution {
-    private int maxCount = -1;
+    private int answer = 0;
     
     public int solution(int k, int[][] dungeons) {
-        boolean[] visited = new boolean[dungeons.length];
+        dfs(new boolean[dungeons.length], dungeons, k, 0);
         
-        dfs(dungeons, visited, 0, k);
-        
-        return maxCount;
+        return answer;
     }
     
-    private void dfs(int[][] dungeons, boolean[] visited, int count, int k) {
-        maxCount = Math.max(maxCount, count);
-        
+    // 이전 인덱스도 방문해야 하기 때문에 시작 인덱스를 주지 말고 반복문은 0부터 시작해야 한다.
+    private void dfs(boolean[] visited, int[][] dungeons, int power, int count) {
         for (int i = 0; i < dungeons.length; i++) {
-            // 아직 방문하지 않았고 최소 필요 피로도가 현재 피로도보다 작거나 같은 경우
-            if (!visited[i] && dungeons[i][0] <= k) {
+            // 아직 방문하지 않았고, 최소 필요 피로도가 현재 힘보다 작거나 같을 때
+            if (!visited[i] && dungeons[i][0] <= power) {
                 visited[i] = true;
-                dfs(dungeons, visited, count + 1, k - dungeons[i][1]);
+                dfs(visited, dungeons, power - dungeons[i][1], count + 1);
                 visited[i] = false;
             }
         }
+        
+        // 던전 방문 순서는 첫번째 -> 세번째 -> 두번째 순으로도 방문 가능한 것으로 보아 모든 던전을 방문해야한다.
+        answer = Math.max(answer, count);
     }
 }
