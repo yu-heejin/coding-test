@@ -2,48 +2,48 @@ import java.util.*;
 
 class Solution {
     public int solution(int[] queue1, int[] queue2) {
-        // 큐 추가
         Queue<Integer> q1 = new LinkedList<>();
         Queue<Integer> q2 = new LinkedList<>();
-        
-        // 합 구하기
-        long q1Sum = 0;
-        long q2Sum = 0;
+        long sum1 = 0;
+        long sum2 = 0;
         
         for (int i = 0; i < queue1.length; i++) {
             q1.add(queue1[i]);
             q2.add(queue2[i]);
-            
-            q1Sum += queue1[i];
-            q2Sum += queue2[i];
+            sum1 += queue1[i];
+            sum2 += queue2[i];
         }
         
-        int answer = 0;
-        int n = queue1.length;
-        if ((q1Sum + q2Sum) % 2 > 0) {
+        if ((sum1 + sum2) % 2 > 0) {
+            // 홀수로는 같은 합을 만들 수 없다.
             return -1;
         }
-        long target = (q1Sum + q2Sum) / 2;
         
-        // 모든 큐가 한번씩 움직이는 경우가 2n임
-        while (answer <= 2 * n + 1) {
-            if (q1Sum > q2Sum) {
-                int num = q1.poll();
-                q2.add(num);
-                q1Sum -= num;
-                q2Sum += num;
-                answer++;
-            } else if (q1Sum == q2Sum) {
-                return answer;
+        int count = 0;
+        // 큐의 모든 원소가 한번씩 도는 경우의 수
+        while (count <= queue1.length * 2 + 2) {
+            // 각 큐의 합을 계산해서, 더 큰 쪽이 더 작은 쪽으로 원소를 이동한다.
+            if (sum1 > sum2) {
+                int temp = q1.poll();
+                q2.add(temp);
+                sum1 -= temp;
+                sum2 += temp;
+            } else if (sum1 == sum2) {
+                return count;
             } else {
-                int num = q2.poll();
-                q1.add(num);
-                q2Sum -= num;
-                q1Sum += num;
-                answer++;
+                int temp = q2.poll();
+                q1.add(temp);
+                sum2 -= temp;
+                sum1 += temp;
             }
+            
+            count++;
         }
         
-        return q1Sum == q2Sum ? answer : -1;
+        if (sum1 == sum2) {
+            return count;
+        }
+        
+        return -1;
     }
 }
