@@ -1,7 +1,6 @@
-SELECT AO.animal_id
-    , AO.name
-FROM animal_ins AI
-    RIGHT JOIN animal_outs AO ON AI.animal_id = AO.animal_id
-WHERE AI.animal_id IS NULL
-ORDER BY AO.animal_id
-;
+SELECT O.animal_id
+    , O.name
+FROM animal_ins I
+    RIGHT JOIN animal_outs O ON I.animal_id = O.animal_id
+WHERE I.animal_id IS NULL
+ORDER BY O.animal_id;
