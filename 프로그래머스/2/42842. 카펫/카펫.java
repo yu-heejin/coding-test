@@ -1,20 +1,24 @@
 class Solution {
-    // 가로 길이, 세로 길이 모두 자연수
-    // yellow = x * y
-    // brown = (x + 2) * (y + 2) - (x * y)
     public int[] solution(int brown, int yellow) {
-        int[] answer = new int[2];
+        int s = brown + yellow;   // 전체 면적
+        int[] answer = new int[2];   // 카펫의 가로와 세로
         
-        for (int y = 1; y <= yellow; y++) {
-            // 나누어 떨어지는 경우, 약수이다.
-            if (yellow % y == 0) {
-                // x = yellow / y
-                int x = yellow / y;
-                
-                if (2 * x + 2 * y + 4 == brown) {
-                    answer[0] = y + 2;
-                    answer[1] = x + 2;
-                }
+        // 면적에 따른 가로, 세로 길이 찾기
+        for (int width = s; width > 0; width--) {
+            // 나누어 떨어지는 경우에만 넓이가 된다.
+            if (s % width > 0) continue;
+            
+            int height = s / width;
+            
+            // 노란 카펫의 개수 (넓이)
+            int tempYellow = (width - 2) * (height - 2);
+            // 갈색의 개수 (넓이)
+            int tempBrown = s - tempYellow;
+            
+            if (tempYellow == yellow && tempBrown == brown) {
+                answer[0] = width;
+                answer[1] = height;
+                break;
             }
         }
         
