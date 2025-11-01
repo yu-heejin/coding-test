@@ -1,52 +1,71 @@
 import java.util.*;
 
 class Solution {
-    private final int[] first = {1, 2, 3, 4, 5};
-    private final int[] second = {2, 1, 2, 3, 2, 4, 2, 5};
-    private final int[] third = {3, 3, 1, 1, 2, 2, 4, 4, 5, 5};
+    private final int[] ONE = {1, 2, 3, 4, 5};
+    private final int[] TWO = {2, 1, 2, 3, 2, 4, 2, 5};
+    private final int[] THREE = {3, 3, 1, 1, 2, 2, 4, 4, 5, 5};
     
     public int[] solution(int[] answers) {
-        int firstIndex = 0;
-        int secondIndex = 0;
-        int thirdIndex = 0;
-        int firstCount = 0;
-        int secondCount = 0;
-        int thirdCount = 0;
+        List<Integer> result = new ArrayList<>();
+        int oneAnswer = 0;
+        int twoAnswer = 0;
+        int threeAnswer = 0;
+        int oneIndex = 0;
+        int twoIndex = 0;
+        int threeIndex = 0;
         
-        for (int i = 0; i < answers.length; i++) {
-            if (first[firstIndex] == answers[i]) {
-                firstCount++;
+        for (int answer : answers) {
+            if (ONE[oneIndex] == answer) {
+                oneAnswer++;
             }
             
-            if (second[secondIndex] == answers[i]) {
-                secondCount++;
+            if (TWO[twoIndex] == answer) {
+                twoAnswer++;
             }
             
-            if (third[thirdIndex] == answers[i]) {
-                thirdCount++;
+            if (THREE[threeIndex] == answer) {
+                threeAnswer++;
             }
             
-            firstIndex = (firstIndex + 1) % first.length;
-            secondIndex = (secondIndex + 1) % second.length;
-            thirdIndex = (thirdIndex + 1) % third.length;
+            oneIndex = (oneIndex + 1) % ONE.length;
+            twoIndex = (twoIndex + 1) % TWO.length;
+            threeIndex = (threeIndex + 1) % THREE.length;
         }
         
-        List<Integer> answer = new ArrayList<>();
-        int max = Math.max(firstCount, Math.max(secondCount, thirdCount));
-        
-        if (max == firstCount) {
-            answer.add(1);
+        if (oneAnswer > twoAnswer) {
+            if (oneAnswer < threeAnswer) {
+                // 3 > 1 > 2
+                return new int[] {3};
+            } else if (oneAnswer == threeAnswer) {
+                // 3 == 1 > 2
+                return new int[] {1, 3};
+            } else {
+                // 1 >
+                return new int[] {1};
+            }
+        } else if (oneAnswer == twoAnswer) {
+            if (oneAnswer < threeAnswer) {
+                // 3 > 1 == 2
+                return new int[] {3};
+            } else if (oneAnswer == threeAnswer) {
+                // 1 == 2 == 3
+                return new int[] {1, 2, 3};
+            } else {
+                // 1 == 2 > 3
+                return new int[] {1, 2};
+            }
+        } else {
+            // 2 > 1
+            if (twoAnswer < threeAnswer) {
+                // 3 > 2 > 1
+                return new int[] {3};
+            } else if (twoAnswer == threeAnswer) {
+                // 3 == 2 > 1
+                return new int[] {2, 3};
+            } else {
+                // 2 >
+                return new int[] {2};
+            }
         }
-        
-        if (max == secondCount) {
-            answer.add(2);
-        }
-        
-        if (max == thirdCount) {
-            answer.add(3);
-        }
-        
-        // List to int[]
-        return answer.stream().mapToInt(Integer::intValue).toArray();
     }
 }
